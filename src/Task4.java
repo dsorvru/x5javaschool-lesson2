@@ -37,7 +37,7 @@ public class Task4 {
         } catch (Exception e) {
             String msg = "Веденное число очень большое или очень маленькое."
                     + " Используйте диапазон [" + Integer.MIN_VALUE + ":" + Integer.MAX_VALUE + "].";
-            throw new Exception();
+            throw new Exception(msg);
         }
     }
 
