@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Task1 {
 
@@ -6,21 +7,21 @@ public class Task1 {
         System.out.print("Введите целое число и нажмите [enter]: ");
 
         final Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().strip();
-        scanner.close();
+        try {
+            int number = scanner.nextInt();
 
-        if (isInteger(input)) {
-            System.out.println("Последняя цифра: " + input.charAt(input.length() - 1));
-        } else {
-            System.out.println("Ошибка: Введенное значение не является целым числом.");
-        }
-    }
+            // берем число по модулю, иначе сумма цифр отрицательного числа будет отрицательным числом
+            int absNumber = (number < 0) ? Math.abs(number) : number;  
+            System.out.println("Последняя цифра: " + absNumber % 10);
 
-    private static boolean isInteger(String value) {
-        boolean valueIsInteger = false;
-        if ((value != null) && (value.matches("0|-?[1-9][0-9]*"))) {
-            valueIsInteger = true;
+        } catch (InputMismatchException e) {
+            System.out.println("Ошибка: введенное значение не является целым числом или находится вне допустимого диапазона.");
+        } catch (Exception e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
         }
-        return valueIsInteger;
     }
 }

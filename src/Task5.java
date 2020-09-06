@@ -1,61 +1,43 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Task5 {
 
     public static void main(String[] args) {
-        System.out.print("Введите три целых числа, отделяя их друг от друга символом пробел, и нажмите [enter]: ");
+        System.out.print("Введите три целых числа и нажмите [enter]: ");
 
         final Scanner scanner = new Scanner(System.in);
         try {
 
             int[] values = getNumbersFromUser(scanner, 3);
-            System.out.println("Наименьшее из чисел: " + minValue(values));
+            System.out.println("Наименьшее из чисел " + Arrays.toString(values) + ": " + minValue(values));
 
         } catch (Exception e) {
             System.out.println("Ошибка: " + e.getMessage());
         } finally {
-            scanner.close();
-        }
+            if (scanner != null) {
+                scanner.close();
+            }
+        }    
     }
 
     private static int[] getNumbersFromUser(Scanner scanner, int requestedNumbers) throws Exception {
-        String input = scanner.nextLine().strip();
-        String[] splittedInput = input.split("\\s+");
-        if (splittedInput.length != requestedNumbers) {
-            throw new Exception("Введено неверное количество чисел.");
-        }
 
-        int[] numbers = new int[splittedInput.length];
-        for (int i = 0; i < splittedInput.length; i++) {
-            numbers[i] = StringToInteger(splittedInput[i]);
+        int[] numbers = new int[requestedNumbers];
+        for (int i = 0; i < requestedNumbers; i++) {
+            while (!scanner.hasNextInt()) {
+                System.out.println("Введенное значение " + scanner.next() + " не является целым числом или находится вне допустимого диапазона.");
+            }
+            numbers[i] = scanner.nextInt();
         }
+        // подскажите, пожалуйста, как с помощью Scanner.nextInt контролировать ввод заданного количества целых чисел. 
+        // пользователь может ввести больше чисел или 3 числа и что-то еще.
         return numbers;
     }
 
-    private static int StringToInteger(String value) throws Exception {
-        if (!isInteger(value)) {
-            throw new Exception("\"" + value + "\" не является целым числом.");
-        }
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            String msg = "Число \"" + value + "\" очень большое или очень маленькое."
-                    + " Используйте диапазон [" + Integer.MIN_VALUE + ":" + Integer.MAX_VALUE + "].";
-            throw new Exception(msg);
-        }
-    }
-
-    private static boolean isInteger(String value) {
-        boolean valueIsInteger = false;
-        if ((value != null) && (value.matches("0|-?[1-9][0-9]*"))) {
-            valueIsInteger = true;
-        }
-        return valueIsInteger;
-    }
-
     public static int minValue(int[] arr) {
-        if (isEmptyArray(arr)) {
-            return 0;
+        if ((arr == null) || (arr.length == 0)) {
+            throw new IllegalArgumentException("Массив не определен или не имеет элементов.");
         }
 
         int min = arr[0];
@@ -65,13 +47,5 @@ public class Task5 {
             }
         }
         return min;
-    }
-
-    private static boolean isEmptyArray(int[] arr) {
-        boolean isEmpty = false;
-        if ((arr == null) || (arr.length == 0)) {
-            isEmpty = true;
-        }
-        return isEmpty;
     }
 }

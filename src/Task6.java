@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Task6 {
 
@@ -6,58 +7,33 @@ public class Task6 {
         System.out.print("Введите целое число и нажмите [enter]: ");
 
         final Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().strip();
-        scanner.close();
-
-        if (isInteger(input)) {
-            System.out.println(getDescription(input));
-        } else {
-            System.out.println("Ошибка: Введенное значение не является целым числом.");
-        }
-    }
-
-    private static boolean isInteger(String value) {
-        boolean valueIsInteger = false;
-        if ((value != null) && (value.matches("0|-?[1-9][0-9]*"))) {
-            valueIsInteger = true;
-        }
-        return valueIsInteger;
-    }
-
-    private static String getDescription(String input) {
-        String description;
-        if (input.equals("0")) {
-            description = "нулевое число";
-        } else {
-
-            if (input.charAt(0) == '-') {
-                description = "отрицательное";
-            } else {
-                description = "положительное";
+        
+        try {
+            int number = scanner.nextInt();
+            System.out.println(getDescription(number));
+            
+        } catch (InputMismatchException e) {
+            System.out.println("Ошибка: введенное значение не является целым числом или находится вне допустимого диапазона.");
+        } catch (Exception e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close();
             }
-
-            if (isEven(input)) {
-                description += " четное";
-            } else {
-                description += " нечетное";
-            }
-            description += " число";
         }
-
-        return description;
     }
 
-    private static boolean isEven(String number) {
-        boolean evenNumber = false;
-        switch (number.charAt(number.length() - 1)) {
-            case '0':
-            case '2':
-            case '4':
-            case '6':
-            case '8':
-                evenNumber = true;
-                break;
+    private static String getDescription(int number) {
+        StringBuilder description = new StringBuilder();
+        
+        if (number == 0) {
+            description.append("нулевое");
+        } else {
+            description.append((number < 0) ? "отрицательное" : "положительное");
+            description.append((number % 2 == 0) ? " четное" : " нечетное");
         }
-        return evenNumber;
+        description.append(" число");
+
+        return description.toString();
     }
 }
