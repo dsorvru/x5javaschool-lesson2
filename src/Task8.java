@@ -26,7 +26,7 @@ public class Task8 {
                 sumNegatives += element;
                 
                 if (element % 2 == 0) {
-                    sumEvenNegatives++;
+                    sumEvenNegatives += element;
                 }
             }
         }
